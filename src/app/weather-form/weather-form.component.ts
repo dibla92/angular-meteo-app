@@ -113,9 +113,9 @@ export class WeatherFormComponent implements OnInit {
     const coordinatesResponse = await this.getCoordinates(address);
     const coords = coordinatesResponse?.geometry;
     const data = await this.getWeatherData(coords.lat, coords.lng, startDate, endDate);
-    this.setupTempChart(data, coordinatesResponse);
-    this.setupWindChart(data, coordinatesResponse);
-    this.setupHumChart(data, coordinatesResponse);
+    this.setupTempChart(data, coordinatesResponse, periodSelect);
+    this.setupWindChart(data, coordinatesResponse, periodSelect);
+    this.setupHumChart(data, coordinatesResponse, periodSelect);
   }
 
   async getCoordinates(address: string): Promise<{ geometry: { lat: number; lng: number } }> {
@@ -126,16 +126,23 @@ export class WeatherFormComponent implements OnInit {
     return this.weatherService.getLastYearWeather(lat, lng, startDate, endDate);
   }
 
-  setupTempChart(data: any, coordinatesResponse: any) {
+  setupTempChart(data: any, coordinatesResponse: any, periodSelect: string) {
+    let titleText = `Temperatura - ${
+      periodSelect === 'daily'
+        ? 'Giornaliero'
+        : periodSelect === 'weekly'
+        ? 'Settimanale'
+        : 'Annuale'
+    }`;
     this.tempChartOptions = {
       infoToShow: coordinatesResponse,
-      title: { text: 'Dati Meteo - Ultimo Anno' },
+      title: { text: titleText },
       xAxis: {
         categories: data.dates,
         labels: {
           step: Math.floor(data.dates.length / 12),
-          rotation: -45, 
-          align: 'right', 
+          rotation: -45,
+          align: 'right',
           style: {
             fontSize: '11px',
           },
@@ -156,10 +163,17 @@ export class WeatherFormComponent implements OnInit {
     this.sharedService.tempUpdateData(this.tempChartOptions);
   }
 
-  setupWindChart(data: any, coordinatesResponse: any) {
+  setupWindChart(data: any, coordinatesResponse: any, periodSelect: string) {
+    let titleText = `Velocità del Vento - ${
+      periodSelect === 'daily'
+        ? 'Giornaliero'
+        : periodSelect === 'weekly'
+        ? 'Settimanale'
+        : 'Annuale'
+    }`;
     this.windChartOptions = {
       infoToShow: coordinatesResponse,
-      title: { text: 'Velocità del Vento - Ultimo Anno' },
+      title: { text: titleText },
       xAxis: {
         categories: data.dates,
         labels: {
@@ -178,7 +192,7 @@ export class WeatherFormComponent implements OnInit {
           name: 'Vento (km/h)',
           type: 'line',
           data: data.windspeed,
-          color: '#3b82f6', 
+          color: '#3b82f6',
         },
       ],
       credits: { enabled: false },
@@ -187,14 +201,21 @@ export class WeatherFormComponent implements OnInit {
     this.sharedService.windUpdateData(this.windChartOptions);
   }
 
-  setupHumChart(data: any, coordinatesResponse: any) {
+  setupHumChart(data: any, coordinatesResponse: any, periodSelect: string) {
+    let titleText = `Umidità - ${
+      periodSelect === 'daily'
+        ? 'Giornaliero'
+        : periodSelect === 'weekly'
+        ? 'Settimanale'
+        : 'Annuale'
+    }`;
     this.humChartOptions = {
       infoToShow: coordinatesResponse,
-      title: { text: 'Umidità - Ultimo Anno' },
+      title: { text: titleText },
       xAxis: {
         categories: data.dates,
         labels: {
-          step: Math.floor(data.dates.length / 12), 
+          step: Math.floor(data.dates.length / 12),
           rotation: -45,
           align: 'right',
           style: { fontSize: '11px' },
@@ -209,12 +230,24 @@ export class WeatherFormComponent implements OnInit {
           name: 'Umidità (%)',
           type: 'line',
           data: data.humidity,
-          color: '#22c55e', 
+          color: '#22c55e',
         },
       ],
       credits: { enabled: false },
     };
 
     this.sharedService.humUpdateData?.(this.humChartOptions);
+  }
+
+  isPeriodValid(): boolean {
+    const period = this.form.controls['periodSelect'].value;
+    if (period === 'daily') {
+      return !!this.form.controls['date'].value;
+    } else if (period === 'weekly') {
+      return !!this.form.controls['week'].value;
+    } else if (period === 'yearly') {
+      return !!this.form.controls['year'].value;
+    }
+    return false;
   }
 }

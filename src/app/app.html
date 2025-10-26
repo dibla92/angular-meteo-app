@@ -2,7 +2,7 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <p>Inserisci l'indirizzo per visualizzare in tempo reale i dati meteorologici</p>
+      <p>Inserisci l'indirizzo e il periodo di interesse per visualizzare i dati meteorologici</p>
       <button class="cta-button" (click)="scrollToForm()">Inizia Ora</button>
     </div>
   </section>
@@ -10,7 +10,6 @@
   <!-- Form Section -->
   <section class="form-section" id="form-section">
     <h2 class="h2">Compila il Modulo</h2>
-    <p>Inserisci i dati richiesti e ottieni subito le tue visualizzazioni personalizzate.</p>
     <app-weather-form></app-weather-form>
   </section>
 
@@ -44,13 +43,11 @@
       <div class="chart-card">
         <app-line-chart [chartOptions]="tempChartOptions"></app-line-chart>
       </div>
-    </div>
-    <div class="charts-flex-container">
+
       <div class="chart-card">
         <app-line-chart [chartOptions]="windChartOptions"></app-line-chart>
       </div>
-    </div>
-    <div class="charts-flex-container">
+
       <div class="chart-card">
         <app-line-chart [chartOptions]="humChartOptions"></app-line-chart>
       </div>
