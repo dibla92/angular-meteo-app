@@ -1,0 +1,47 @@
+<div class="weather-form-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="weather-form">
+    <label for="address">Città:</label>
+    <input
+      id="address"
+      formControlName="address"
+      class="address"
+      placeholder="Inserisci indirizzo"
+      [class.invalid]="form.controls['address'].invalid && form.controls['address'].touched"
+    />
+    <label for="periodSelect">Periodo:</label>
+    <select
+      id="periodSelect"
+      formControlName="periodSelect"
+      placeholder="Inserisci periodo"
+      class="period-select"
+    >
+      <option value="daily">Giornaliero</option>
+      <option value="weekly">Settimanale</option>
+      <option value="yearly">Annuale</option>
+    </select>
+    <div class="period-choosen" *ngIf="form.get('periodSelect')?.value === 'daily'">
+      <label for="date">Seleziona una data:</label>
+      <input id="date" type="date" formControlName="date" />
+    </div>
+
+    <div class="period-choosen" *ngIf="form.get('periodSelect')?.value === 'weekly'">
+      <label for="week">Seleziona una settimana:</label>
+      <input id="week" type="week" formControlName="week" />
+    </div>
+
+    <div class="period-choosen" *ngIf="form.get('periodSelect')?.value === 'yearly'">
+      <label for="year">Seleziona un anno:</label>
+      <input id="year" type="number" formControlName="year" min="2000" max="2100" />
+    </div>
+    <button
+      class="cta-button"
+      type="submit"
+      [disabled]="form.invalid || form.controls['address'].value.length === 0"
+    >
+      Invia
+    </button>
+  </form>
+  <div class="error" *ngIf="form.controls['address'].invalid && form.controls['address'].touched">
+    Inserisci un indirizzo valido
+  </div>
+</div>

@@ -1,1 +1,137 @@
-/* You can add global styles to this file, and also import other style files */
+
+:host {
+  font-family: 'Inter', sans-serif;
+  --primary: #6a00ff;
+  --secondary: #ff3cac;
+  --bg-light: #f9f9fb;
+  --text-dark: #1e1e2f;
+  --gradient: linear-gradient(90deg, var(--secondary), var(--primary));
+  scroll-behavior: smooth;
+}
+
+/* Layout */
+.landing-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--gradient);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 700px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background: white;
+  color: var(--primary);
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+.cta-button:disabled {
+  background: #e0e0e0; 
+  color: #a0a0a0; 
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Form Section */
+.form-section {
+  background: var(--bg-light);
+  padding: 5rem 1rem;
+  text-align: center;
+}
+
+.form-section h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.form-section p {
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+app-weather-form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: block;
+}
+
+.charts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.charts-section {
+  padding: 5rem 2rem;
+  background: white;
+  text-align: center;
+}
+
+.charts-section h2 {
+  font-size: 2rem;
+  color: var(--text-dark);
+}
+
+.charts-flex-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.chart-card {
+  background: var(--bg-light);
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  transition: transform 0.3s ease;
+  overflow: auto;
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Footer */
+footer {
+  background: var(--gradient);
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+}
