@@ -40,4 +40,7 @@
   <div class="error" *ngIf="form.controls['address'].invalid && form.controls['address'].touched">
     Inserisci un indirizzo valido
   </div>
+  <div class="error" *ngIf="customErrorMessage">
+    {{ customErrorMessage }}
+  </div>
 </div>

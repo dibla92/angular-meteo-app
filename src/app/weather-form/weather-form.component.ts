@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { GeocodingService } from '../services/geocoding.service';
+import { GeocodingService, GeoResult } from '../services/geocoding.service';
 import { WeatherService } from '../services/weather.service';
 import * as Highcharts from 'highcharts';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -23,6 +23,7 @@ export class WeatherFormComponent implements OnInit {
   windChartOptions: MyChartOptions = {};
   humChartOptions: MyChartOptions = {};
   selectedPeriod = 'daily'; // valore predefinito
+  customErrorMessage: string = '';
   @Output() addressChange = new EventEmitter<string>();
 
   constructor(
@@ -92,35 +93,49 @@ export class WeatherFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    let startDate = '';
-    let endDate = '';
-    const address = this.form.value.address;
-    const periodSelect = this.form.value.periodSelect;
-    const date = this.form.value.date;
-    const week = this.form.value.week;
-    const year = this.form.value.year;
-    this.addressChange.emit(address);
-    if (periodSelect === 'daily' && date) {
-      startDate = date;
-      endDate = date;
-    } else if (periodSelect === 'weekly' && week) {
-      let dates = getWeekRange(week);
-      startDate = dates?.startDate;
-      endDate = dates?.endDate;
-    } else if (periodSelect === 'yearly' && year) {
-      let dates = getYearRange(year);
-      startDate = dates?.startDate;
-      endDate = dates?.endDate;
+    try {
+      let startDate = '';
+      let endDate = '';
+      const address = this.form.value.address;
+      const periodSelect = this.form.value.periodSelect;
+      const date = this.form.value.date;
+      const week = this.form.value.week;
+      const year = this.form.value.year;
+      if (periodSelect === 'daily' && date) {
+        startDate = date;
+        endDate = date;
+      } else if (periodSelect === 'weekly' && week) {
+        let dates = getWeekRange(week);
+        startDate = dates?.startDate;
+        endDate = dates?.endDate;
+      } else if (periodSelect === 'yearly' && year) {
+        let dates = getYearRange(year);
+        startDate = dates?.startDate;
+        endDate = dates?.endDate;
+      }
+      const coordinatesResponse = await this.getCoordinates(address);
+      if (coordinatesResponse) {
+        const coords = coordinatesResponse?.geometry;
+        const city = coordinatesResponse?.formatted?.split(',');
+        city && this.addressChange.emit(`${city}`);
+        const data = await this.getWeatherData(coords.lat, coords.lng, startDate, endDate);
+        this.setupTempChart(data, coordinatesResponse, periodSelect);
+        this.setupWindChart(data, coordinatesResponse, periodSelect);
+        this.setupHumChart(data, coordinatesResponse, periodSelect);
+      } else {
+        this.customErrorMessage = 'Indirizzo non valido. Per favore riprova.';
+      }
+    } catch (error: any) {
+      if (error.message === 'NO_RESULTS') {
+        this.customErrorMessage = 'Indirizzo non valido. Per favore riprova.';
+      } else {
+        this.customErrorMessage =
+          'Si è verificato un errore durante il recupero dei dati. Per favore riprova.';
+      }
     }
-    const coordinatesResponse = await this.getCoordinates(address);
-    const coords = coordinatesResponse?.geometry;
-    const data = await this.getWeatherData(coords.lat, coords.lng, startDate, endDate);
-    this.setupTempChart(data, coordinatesResponse, periodSelect);
-    this.setupWindChart(data, coordinatesResponse, periodSelect);
-    this.setupHumChart(data, coordinatesResponse, periodSelect);
   }
 
-  async getCoordinates(address: string): Promise<{ geometry: { lat: number; lng: number } }> {
+  async getCoordinates(address: string): Promise<GeoResult> {
     return this.geoService.getCoordinates(address);
   }
 
