@@ -128,7 +128,11 @@ export class WeatherFormComponent implements OnInit {
     return this.weatherService.getWeather(lat, lng, startDate, endDate);
   }
 
-  setupTempChart(data: any, coordinatesResponse: any, periodSelect: string) {
+  setupTempChart(
+    data: { dates: any; temperatures: any; humidity: any; windspeed: any },
+    coordinatesResponse: { geometry: { lat: number; lng: number } },
+    periodSelect: string
+  ) {
     let titleText = `Temperatura - ${
       periodSelect === 'daily'
         ? 'Giornaliero'
@@ -165,7 +169,11 @@ export class WeatherFormComponent implements OnInit {
     this.sharedService.tempUpdateData(this.tempChartOptions);
   }
 
-  setupWindChart(data: any, coordinatesResponse: any, periodSelect: string) {
+  setupWindChart(
+    data: { dates: any; temperatures: any; humidity: any; windspeed: any },
+    coordinatesResponse: { geometry: { lat: number; lng: number } },
+    periodSelect: string
+  ) {
     let titleText = `Velocità del Vento - ${
       periodSelect === 'daily'
         ? 'Giornaliero'
@@ -203,7 +211,11 @@ export class WeatherFormComponent implements OnInit {
     this.sharedService.windUpdateData(this.windChartOptions);
   }
 
-  setupHumChart(data: any, coordinatesResponse: any, periodSelect: string) {
+  setupHumChart(
+    data: { dates: any; temperatures: any; humidity: any; windspeed: any },
+    coordinatesResponse: { geometry: { lat: number; lng: number } },
+    periodSelect: string
+  ) {
     let titleText = `Umidità - ${
       periodSelect === 'daily'
         ? 'Giornaliero'

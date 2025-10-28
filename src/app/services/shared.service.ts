@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import * as Highcharts from 'highcharts';
 
 export interface MyChartOptions extends Highcharts.Options {
-  infoToShow?: any; // puoi tipizzare meglio se sai la struttura di coordinatesResponse
+  infoToShow?: { geometry: { lat: number; lng: number } }; // puoi tipizzare meglio se sai la struttura di coordinatesResponse
 }
 
 @Injectable({ providedIn: 'root' })
