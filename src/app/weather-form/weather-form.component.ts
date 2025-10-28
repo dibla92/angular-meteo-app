@@ -122,6 +122,7 @@ export class WeatherFormComponent implements OnInit {
         this.setupTempChart(data, coordinatesResponse, periodSelect);
         this.setupWindChart(data, coordinatesResponse, periodSelect);
         this.setupHumChart(data, coordinatesResponse, periodSelect);
+        this.customErrorMessage = ''
       } else {
         this.customErrorMessage = 'Indirizzo non valido. Per favore riprova.';
       }
