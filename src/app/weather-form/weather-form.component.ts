@@ -23,6 +23,7 @@ export class WeatherFormComponent implements OnInit {
   windChartOptions: MyChartOptions = {};
   humChartOptions: MyChartOptions = {};
   selectedPeriod = 'daily'; // valore predefinito
+  @Output() addressChange = new EventEmitter<string>();
 
   constructor(
     private fb: FormBuilder,
@@ -98,6 +99,7 @@ export class WeatherFormComponent implements OnInit {
     const date = this.form.value.date;
     const week = this.form.value.week;
     const year = this.form.value.year;
+    this.addressChange.emit(address);
     if (periodSelect === 'daily' && date) {
       startDate = date;
       endDate = date;
@@ -123,7 +125,7 @@ export class WeatherFormComponent implements OnInit {
   }
 
   async getWeatherData(lat: number, lng: number, startDate: string, endDate: string): Promise<any> {
-    return this.weatherService.getLastYearWeather(lat, lng, startDate, endDate);
+    return this.weatherService.getWeather(lat, lng, startDate, endDate);
   }
 
   setupTempChart(data: any, coordinatesResponse: any, periodSelect: string) {

@@ -19,6 +19,9 @@ export class SharedService {
   private tempDataSource = new BehaviorSubject<MyChartOptions>({});
   tempCurrentData = this.tempDataSource.asObservable();
 
+  private lastYearDataSource = new BehaviorSubject<MyChartOptions>({});
+  lastYearData = this.lastYearDataSource.asObservable();
+
   tempUpdateData(data: MyChartOptions) {
     this.tempDataSource.next(data);
   }
@@ -28,6 +31,10 @@ export class SharedService {
   }
 
   humUpdateData(data: MyChartOptions) {
+    this.humDataSource.next(data);
+  }
+
+  exportLastYear(data: any) {
     this.humDataSource.next(data);
   }
 }

@@ -10,4 +10,4 @@ Questa è un'applicazione Angular che consente di:
 
 ```bash
 npm install
-ng serve
+npm run start

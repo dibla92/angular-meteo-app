@@ -10,7 +10,7 @@
   <!-- Form Section -->
   <section class="form-section" id="form-section">
     <h2 class="h2">Compila il Modulo</h2>
-    <app-weather-form></app-weather-form>
+    <app-weather-form (addressChange)="onAddressReceived($event)"></app-weather-form>
   </section>
 
   <!-- Charts Section -->
@@ -37,18 +37,20 @@
         </h2>
         <h6 *ngIf="updatedAt">Aggiornato al: {{ updatedAt }}</h6>
       </div>
-      <button class="cta-button">Esporta dati</button>
+      <button *ngIf="addressReceived" class="cta-button" (click)="exportLastYear()">
+        Esporta ultimi 12 mesi di {{ addressReceived }}
+      </button>
     </div>
     <div class="charts-flex-container">
-      <div class="chart-card">
+      <div *ngIf="tempChartOptions?.infoToShow" class="chart-card">
         <app-line-chart [chartOptions]="tempChartOptions"></app-line-chart>
       </div>
 
-      <div class="chart-card">
+      <div *ngIf="windChartOptions?.infoToShow" class="chart-card">
         <app-line-chart [chartOptions]="windChartOptions"></app-line-chart>
       </div>
 
-      <div class="chart-card">
+      <div *ngIf="humChartOptions?.infoToShow" class="chart-card">
         <app-line-chart [chartOptions]="humChartOptions"></app-line-chart>
       </div>
     </div>
